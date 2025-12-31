@@ -11,16 +11,16 @@ function Counter(props) {
             <div className="flex items-center gap-4">
                 <button
                  onClick={() => setCount(count - 1)}
-                 className="w-10 h-10 rounded-full bg-gray-100 text-black flex items-center justify-center hover:bg-gray-300"
+                 className="w-10 h-10 rounded-full bg-red-600 text-black flex items-center justify-center hover:bg-red-350 transition-colors"
                 >
                   -
                  </button>
 
                 <span className="mx-2">{count}</span>
-                <button onClick={() => setCount(count + 1)} className="w-10 h-10 rounded-full bg-gray-100 text-black flex items-center justify-center hover:bg-gray-300">+</button>
+                <button onClick={() => setCount(count + 1)} className="w-10 h-10 rounded-full bg-green-600 text-black flex items-center justify-center hover:bg-green-350">+</button>
             </div>
         </div>
-    );
+    )
 }
 
 export default Counter;
