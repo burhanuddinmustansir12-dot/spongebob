@@ -56,6 +56,11 @@ export default function Home() {
               Go to Burhan Page
             </Link>
           </div>
+          <div className="mt-4 px-6 py-3 rounded-lg border-2 border-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors">
+            <Link href="/auth/configuration" className="text-blue-600 hover:text-blue-800 font-medium no-underline">
+              Firebase Configuration
+            </Link>
+          </div>
         </div>
       </main>
     </div>
