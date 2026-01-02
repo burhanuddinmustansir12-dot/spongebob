@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///E:/Node%20js/spongebob/app/api/auth/route.js"],"sourcesContent":["export function GET(){\r\n    return Response.json({\r\n        message:\"You just hit an API\"\r\n    });\r\n}"],"names":[],"mappings":";;;;AAAO,SAAS;IACZ,OAAO,SAAS,IAAI,CAAC;QACjB,SAAQ;IACZ;AACJ"}}]
-}

@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 52, "column": 0}, "map": {"version":3,"sources":["file:///E:/Node%20js/spongebob/app/api/ping/route.js"],"sourcesContent":["\r\n\r\nimport { NextResponse } from 'next/server';\r\nimport { exec } from 'child_process';\r\n\r\nexport async function GET() {\r\n  return new Promise((resolve) => {\r\n    exec(\"ping google.com\", (error, stdout, stderr) => {\r\n      if (error) {\r\n        resolve(NextResponse.json({ \r\n          success: false, \r\n          error: error.message \r\n        }, { status: 500 }));\r\n        return;\r\n      }\r\n      if (stderr) {\r\n        resolve(NextResponse.json({ \r\n          success: false, \r\n          error: stderr \r\n        }, { status: 500 }));\r\n        return;\r\n      }\r\n      resolve(NextResponse.json({ \r\n        success: true, \r\n        result: stdout \r\n      }));\r\n    });\r\n  });\r\n}\r\n"],"names":[],"mappings":";;;;AAEA;AACA;;;AAEO,eAAe;IACpB,OAAO,IAAI,QAAQ,CAAC;QAClB,IAAA,2HAAI,EAAC,mBAAmB,CAAC,OAAO,QAAQ;YACtC,IAAI,OAAO;gBACT,QAAQ,gJAAY,CAAC,IAAI,CAAC;oBACxB,SAAS;oBACT,OAAO,MAAM,OAAO;gBACtB,GAAG;oBAAE,QAAQ;gBAAI;gBACjB;YACF;YACA,IAAI,QAAQ;gBACV,QAAQ,gJAAY,CAAC,IAAI,CAAC;oBACxB,SAAS;oBACT,OAAO;gBACT,GAAG;oBAAE,QAAQ;gBAAI;gBACjB;YACF;YACA,QAAQ,gJAAY,CAAC,IAAI,CAAC;gBACxB,SAAS;gBACT,QAAQ;YACV;QACF;IACF;AACF"}}]
-}
