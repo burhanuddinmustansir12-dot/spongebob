@@ -7,6 +7,8 @@ export default function Burhan() {
   const [pingResult, setPingResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(process.env.MONGO_URI);
+
   const pingGoogle = async () => {
     setIsLoading(true);
     setPingResult("Pinging...");
