@@ -16,7 +16,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+let auth;
+let db;
+
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  console.log('Firebase initialized successfully');
+} catch (error) {
+  console.error('Firebase initialization error:', error);
+  // Fallback values for development
+  app = null;
+  auth = null;
+  db = null;
+}
 
 // Initialize Analytics only on client side
 let analytics = null;
@@ -27,10 +42,6 @@ if (typeof window !== 'undefined') {
     // Analytics not supported in this environment
   });
 }
-
-// Export Firebase services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 
