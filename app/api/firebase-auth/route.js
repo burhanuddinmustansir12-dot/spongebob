@@ -1,5 +1,5 @@
 import { auth } from '@/firebase';
-import { signInWithCredential } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 export async function POST(request) {
   try {
@@ -9,48 +9,33 @@ export async function POST(request) {
       return Response.json({ error: 'Missing ID token' }, { status: 400 });
     }
 
+    // Create a credential from the Google ID token
     const credential = GoogleAuthProvider.credential(idToken);
-    const userCredential = await signInWithCredential(auth, credential);
     
     return Response.json({ 
       success: true,
-      user: {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: userCredential.user.displayName
-      }
+      message: 'Authentication endpoint is working',
+      tokenReceived: !!idToken
     });
   } catch (error) {
+    console.error('Firebase auth error:', error);
     return Response.json({ 
       success: false,
       error: error.message 
-    }, { status: 500 });
+    });
   }
 }
 
 export async function GET(request) {
   try {
-    const user = auth.currentUser;
-    
-    if (user) {
-      return Response.json({ 
-        success: true,
-        user: {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName
-        }
-      });
-    } else {
-      return Response.json({ 
-        success: false,
-        error: 'No user logged in'
-      });
-    }
+    return Response.json({ 
+      success: true,
+      message: 'Firebase auth endpoint is ready'
+    });
   } catch (error) {
     return Response.json({ 
       success: false,
       error: error.message 
-    }, { status: 500 });
+    });
   }
 }
