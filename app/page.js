@@ -2,19 +2,25 @@
 import Counter from "@/Components/Counter";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/firebase';
 import Link from "next/link";
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
+    // Dynamic import Firebase to avoid initialization issues
+    import('@/firebase').then(({ auth: firebaseAuth, onAuthStateChanged }) => {
+      setAuth(firebaseAuth);
+      
+      const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+        setUser(user);
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }).catch((error) => {
+      console.error('Firebase import error:', error);
+    });
   }, []);
 
   return (
