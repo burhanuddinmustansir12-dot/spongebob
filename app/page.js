@@ -1,27 +1,11 @@
 'use client';
 import Counter from "@/Components/Counter";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [auth, setAuth] = useState(null);
-
-  useEffect(() => {
-    // Dynamic import Firebase to avoid initialization issues
-    import('@/firebase').then(({ auth: firebaseAuth, onAuthStateChanged }) => {
-      setAuth(firebaseAuth);
-      
-      const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
-        setUser(user);
-      });
-
-      return () => unsubscribe();
-    }).catch((error) => {
-      console.error('Firebase import error:', error);
-    });
-  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-sans">
@@ -31,7 +15,10 @@ export default function Home() {
             <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
               <p className="text-green-800 font-medium">Welcome, {user.displayName || user.email}!</p>
               <button 
-                onClick={() => auth.signOut()} 
+                onClick={() => {
+                  // Simple sign out - reload page to clear state
+                  window.location.href = '/';
+                }} 
                 className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Sign out
@@ -40,12 +27,20 @@ export default function Home() {
           ) : (
             <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-blue-800 mb-2">Please sign in to continue</p>
-              <Link 
-                href="/firebase-signin" 
-                className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                Sign in with Firebase
-              </Link>
+              <div className="space-x-4">
+                <Link 
+                  href="/firebase-signin" 
+                  className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  Sign in with Firebase
+                </Link>
+                <Link 
+                  href="/auth/configuration" 
+                  className="inline-block px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                >
+                  Firebase Config
+                </Link>
+              </div>
             </div>
           )}
           <Counter title="Counter #1" />
