@@ -1,12 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, getAuth } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
 
 export default function FirebaseSignIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [useRedirect, setUseRedirect] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,10 +19,28 @@ export default function FirebaseSignIn() {
       }
     });
 
+    // Check for redirect result on component mount
+    getRedirectResult(auth).then((result) => {
+      if (result && result.user) {
+        console.log('Successfully signed in via redirect:', result.user);
+        router.push('/');
+      }
+    }).catch((error) => {
+      console.error('Redirect sign-in error:', error);
+      if (error.code !== 'auth/no-pending-credential') {
+        setError(error.message);
+      }
+    });
+
     return () => unsubscribe();
   }, [router]);
 
   const handleGoogleSignIn = async () => {
+    // Prevent multiple simultaneous sign-in attempts
+    if (loading) {
+      return;
+    }
+    
     setLoading(true);
     setError('');
     
@@ -34,17 +53,35 @@ export default function FirebaseSignIn() {
         include_granted_scopes: 'true' // Include previously granted scopes
       });
       
-      // Use popup for better control
-      const result = await signInWithPopup(auth, provider);
-      
-      if (result.user) {
-        console.log('Successfully signed in:', result.user);
-        // Redirect to home page after successful sign-in
-        router.push('/');
+      if (useRedirect) {
+        // Use redirect method as fallback
+        await signInWithRedirect(auth, provider);
+      } else {
+        // Use popup for better control
+        const result = await signInWithPopup(auth, provider);
+        
+        if (result.user) {
+          console.log('Successfully signed in:', result.user);
+          // Redirect to home page after successful sign-in
+          router.push('/');
+        }
       }
     } catch (err) {
       console.error('Sign-in error:', err);
-      setError(err.message);
+      
+      // Handle specific Firebase auth errors
+      if (err.code === 'auth/cancelled-popup-request' || 
+          err.code === 'auth/popup-closed-by-user') {
+        // User cancelled the popup - don't show error message
+        console.log('Popup was cancelled by user');
+        setError('');
+      } else if (err.code === 'auth/popup-blocked') {
+        setError('Popup was blocked by your browser. Please allow popups for this site.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not authorized for Firebase authentication.');
+      } else {
+        setError(err.message || 'An error occurred during sign-in.');
+      }
     } finally {
       setLoading(false);
     }
@@ -56,6 +93,16 @@ export default function FirebaseSignIn() {
         <h1 className="text-2xl font-bold mb-6">Sign In with Firebase</h1>
         
         <div className="space-y-4 w-full max-w-sm">
+          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <label className="text-sm font-medium text-gray-700">Sign-in Method:</label>
+            <button
+              onClick={() => setUseRedirect(!useRedirect)}
+              className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+            >
+              {useRedirect ? 'Redirect' : 'Popup'}
+            </button>
+          </div>
+          
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
@@ -67,7 +114,7 @@ export default function FirebaseSignIn() {
               <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l2.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            {loading ? 'Signing in...' : 'Sign in with Google'}
+            {loading ? 'Signing in...' : `Sign in with Google (${useRedirect ? 'Redirect' : 'Popup'})`}
           </button>
           
           {error && (
