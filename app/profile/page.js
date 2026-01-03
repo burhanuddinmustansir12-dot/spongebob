@@ -161,91 +161,92 @@ export default function Profile() {
                       </label>
                     </div>
                   </div>
+                </div>
 
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
-                        <input
-                          type="text"
-                          value={isEditing ? profileData.displayName : user?.displayName || ''}
-                          onChange={(e) => setProfileData({...profileData, displayName: e.target.value})}
-                          disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                        <input
-                          type="email"
-                          value={isEditing ? profileData.email : user?.email || ''}
-                          onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                          disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-                        <textarea
-                          value={isEditing ? profileData.bio : user?.bio || ''}
-                          onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
-                          disabled={!isEditing}
-                          rows={4}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+                      <input
+                        type="text"
+                        value={isEditing ? profileData.displayName : user?.displayName || ''}
+                        onChange={(e) => setProfileData({...profileData, displayName: e.target.value})}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
                     </div>
-
-                    <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                        <input
-                          type="text"
-                          value={isEditing ? profileData.location : user?.location || ''}
-                          onChange={(e) => setProfileData({...profileData, location: e.target.value})}
-                          disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
-                        <input
-                          type="url"
-                          value={isEditing ? profileData.website : user?.website || ''}
-                          onChange={(e) => setProfileData({...profileData, website: e.target.value})}
-                          disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        value={isEditing ? profileData.email : user?.email || ''}
+                        onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
                     </div>
-
-                    <div className="flex space-x-4">
-                      {isEditing ? (
-                        <>
-                          <button
-                            onClick={handleSave}
-                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                          >
-                            Save Profile
-                          </button>
-                          <button
-                            onClick={() => setIsEditing(false)}
-                            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          onClick={() => setIsEditing(true)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          Edit Profile
-                        </button>
-                      )}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                      <textarea
+                        value={isEditing ? profileData.bio : user?.bio || ''}
+                        onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
+                        disabled={!isEditing}
+                        rows={4}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                      <input
+                        type="text"
+                        value={isEditing ? profileData.location : user?.location || ''}
+                        onChange={(e) => setProfileData({...profileData, location: e.target.value})}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                      <input
+                        type="url"
+                        value={isEditing ? profileData.website : user?.website || ''}
+                        onChange={(e) => setProfileData({...profileData, website: e.target.value})}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    {isEditing ? (
+                      <>
+                        <button
+                          onClick={handleSave}
+                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                          Save Profile
+                        </button>
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Edit Profile
+                      </button>
+                    )}
+                  </div>
                 </div>
+              </div>
             )}
 
             {activeTab === 'settings' && (
@@ -328,7 +329,7 @@ export default function Profile() {
             )}
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
