@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, getAuth } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
 
@@ -10,24 +10,15 @@ export default function FirebaseSignIn() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if we're returning from a redirect
-    const checkRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result && result.user) {
-          // Successfully signed in, redirect to home
-          console.log('User signed in:', result.user);
-          router.push('/');
-        } else {
-          console.log('No pending redirect result');
-        }
-      } catch (error) {
-        console.error('Redirect result error:', error);
-        setError(error.message);
+    // Check if user is already signed in
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is already signed in, redirect to home
+        router.push('/');
       }
-    };
+    });
 
-    checkRedirectResult();
+    return () => unsubscribe();
   }, [router]);
 
   const handleGoogleSignIn = async () => {
@@ -36,8 +27,14 @@ export default function FirebaseSignIn() {
     
     try {
       const provider = new GoogleAuthProvider();
-      // Use redirect instead of popup for better compatibility
-      await signInWithRedirect(auth, provider);
+      // Use popup for better control
+      const result = await signInWithPopup(auth, provider);
+      
+      if (result.user) {
+        console.log('Successfully signed in:', result.user);
+        // Redirect to home page after successful sign-in
+        router.push('/');
+      }
     } catch (err) {
       console.error('Sign-in error:', err);
       setError(err.message);
@@ -63,7 +60,7 @@ export default function FirebaseSignIn() {
               <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l2.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            {loading ? 'Redirecting to Google...' : 'Sign in with Google'}
+            {loading ? 'Signing in...' : 'Sign in with Google'}
           </button>
           
           {error && (
