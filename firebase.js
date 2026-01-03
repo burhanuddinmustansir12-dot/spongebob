@@ -6,13 +6,13 @@ import { getFirestore } from 'firebase/firestore';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC6YaOF5NFEBC-t6VFTEeMSYYyao58nxvU",
-  authDomain: "burhan-5c22a.firebaseapp.com",
-  projectId: "burhan-5c22a",
-  storageBucket: "burhan-5c22a.firebasestorage.app",
-  messagingSenderId: "296873762540",
-  appId: "1:296873762540:web:1d931761b4dfe6e11c8fc9",
-  measurementId: "G-8WXC1DVE8R"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyC6YaOF5NFEBC-t6VFTEeMSYYyao58nxvU",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "burhan-5c22a.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "burhan-5c22a",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "burhan-5c22a.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "296873762540",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:296873762540:web:1d931761b4dfe6e11c8fc9",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-8WXC1DVE8R"
 };
 
 // Initialize Firebase
