@@ -14,9 +14,12 @@ export default function FirebaseSignIn() {
     const checkRedirectResult = async () => {
       try {
         const result = await getRedirectResult(auth);
-        if (result.user) {
+        if (result && result.user) {
           // Successfully signed in, redirect to home
+          console.log('User signed in:', result.user);
           router.push('/');
+        } else {
+          console.log('No pending redirect result');
         }
       } catch (error) {
         console.error('Redirect result error:', error);
