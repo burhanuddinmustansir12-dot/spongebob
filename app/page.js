@@ -1,11 +1,36 @@
 'use client';
 import Counter from "@/Components/Counter";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/firebase';
 import Link from "next/link";
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white font-sans">
+        <main className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-lg border border-gray-200">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+            <p className="text-gray-600">Checking authentication status...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-sans">
@@ -13,13 +38,16 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {user ? (
             <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
-              <p className="text-green-800 font-medium">Welcome, {user.displayName || user.email}!</p>
+              <p className="text-green-800 font-bold text-lg">You've Signed In!</p>
+              <p className="text-green-700 mt-2">Welcome, {user.displayName || user.email}!</p>
               <button 
                 onClick={() => {
-                  // Simple sign out - reload page to clear state
-                  window.location.href = '/';
+                  // Sign out and reload page
+                  auth.signOut().then(() => {
+                    window.location.href = '/';
+                  });
                 }} 
-                className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Sign out
               </button>
