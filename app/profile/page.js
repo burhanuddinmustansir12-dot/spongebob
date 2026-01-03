@@ -280,6 +280,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
+              </div>
             )}
 
             {activeTab === 'activity' && (
@@ -323,6 +324,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
+              </div>
               </div>
             )}
           </div>
