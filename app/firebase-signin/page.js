@@ -27,6 +27,13 @@ export default function FirebaseSignIn() {
     
     try {
       const provider = new GoogleAuthProvider();
+      // Force account selection and prompt for consent
+      provider.setCustomParameters({
+        prompt: 'select_account', // Forces account selection
+        access_type: 'offline',    // Requests offline access
+        include_granted_scopes: 'true' // Include previously granted scopes
+      });
+      
       // Use popup for better control
       const result = await signInWithPopup(auth, provider);
       
